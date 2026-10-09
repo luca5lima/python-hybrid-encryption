@@ -23,6 +23,17 @@ chave_publica_bob = serialization.load_der_public_key(
 )
 print("Alice recebeu a chave pública de Bob.")
 
+@app.route("/send", methods=["POST"])
+def enviar_mensagem():
+    dados = request.get_json()
+
+    mensagem = dados["mensagem"]
+
+    print("\nAlice recebeu a mensagem:")
+    print(mensagem)
+
+    return "Mensagem recebida por Alice!"
+
 app.run(
     host="127.0.0.1",
     port=5002
