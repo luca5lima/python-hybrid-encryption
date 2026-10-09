@@ -27,6 +27,18 @@ def enviar_chave_publica():
     )
     return chave_publica_bytes
 
+# --- PARTE VI ---
+@app.route("/message", methods=["POST"])
+def receber_mensagem():
+
+    pacote = pickle.loads(request.data)
+
+    nonce = pacote["nonce"]
+    mensagem_cifrada = pacote["mensagem_cifrada"]
+    chave_aes_cifrada = pacote["chave_aes_cifrada"]
+
+    print("\nBob recebeu o pacote.")
+
 app.run(
     host="127.0.0.1",
     port=5001
