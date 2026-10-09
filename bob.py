@@ -1,10 +1,10 @@
 from flask import Flask, request
+import pickle
 from cryptography.hazmat.primitives.asymmetric import rsa
 from cryptography.hazmat.primitives.asymmetric import padding
 from cryptography.hazmat.primitives import serialization
 from cryptography.hazmat.primitives import hashes
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
-import pickle
 
 app = Flask(__name__)
 
@@ -27,7 +27,7 @@ def enviar_chave_publica():
     )
     return chave_publica_bytes
 
-# --- PARTE VI ---
+
 @app.route("/message", methods=["POST"])
 def receber_mensagem():
 
@@ -38,6 +38,30 @@ def receber_mensagem():
     chave_aes_cifrada = pacote["chave_aes_cifrada"]
 
     print("\nBob recebeu o pacote.")
+
+    chave_aes = chave_privada_bob.decrypt(
+        chave_aes_cifrada,
+        padding.OAEP(
+            mgf=padding.MGF1(
+                algorithm=hashes.SHA256()
+            ),
+            algorithm=hashes.SHA256(),
+            label=None
+        )
+    )
+
+    aes = AESGCM(chave_aes)
+
+    mensagem = aes.decrypt(
+        nonce,
+        mensagem_cifrada,
+        None
+    )
+
+    print("Mensagem recebida por Bob:")
+    print(mensagem.decode())
+
+    return "Mensagem recebida!\n"
 
 app.run(
     host="127.0.0.1",
