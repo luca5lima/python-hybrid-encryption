@@ -17,6 +17,16 @@ chave_privada_bob = rsa.generate_private_key(
 chave_publica_bob = chave_privada_bob.public_key()
 print("Bob gerou suas chaves RSA.")
 
+
+@app.route("/public-key", methods=["GET"])
+def enviar_chave_publica():
+
+    chave_publica_bytes = chave_publica_bob.public_bytes(
+        encoding=serialization.Encoding.DER,
+        format=serialization.PublicFormat.SubjectPublicKeyInfo
+    )
+    return chave_publica_bytes
+
 app.run(
     host="127.0.0.1",
     port=5001
