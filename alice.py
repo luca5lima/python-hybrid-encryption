@@ -32,6 +32,14 @@ def enviar_mensagem():
     print("\nAlice recebeu a mensagem:")
     print(mensagem)
 
+    # --- PARTE V ---
+    # 1. Gera uma chave AES e cifra a mensagem
+    chave_aes = AESGCM.generate_key(bit_length=256)
+    mensagem_bytes = mensagem.encode()
+    aes = AESGCM(chave_aes)
+    nonce = os.urandom(12)
+    mensagem_cifrada = aes.encrypt(nonce, mensagem_bytes, None)
+
     return "Mensagem recebida por Alice!"
 
 app.run(
