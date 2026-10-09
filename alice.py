@@ -40,6 +40,16 @@ def enviar_mensagem():
     nonce = os.urandom(12)
     mensagem_cifrada = aes.encrypt(nonce, mensagem_bytes, None)
 
+    # 2. Protege a chave secreta AES com a chave pública de Bob (RSA)
+    chave_aes_cifrada = chave_publica_bob.encrypt(
+        chave_aes,
+        padding.OAEP(
+            mgf=padding.MGF1(algorithm=hashes.SHA256()),
+            algorithm=hashes.SHA256(),
+            label=None
+        )
+    )
+
     return "Mensagem recebida por Alice!"
 
 app.run(
