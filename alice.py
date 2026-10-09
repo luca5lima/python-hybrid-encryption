@@ -50,6 +50,13 @@ def enviar_mensagem():
         )
     )
 
+    # 3. Cria o pacote com todos os dados cifrados
+    pacote = {
+        "nonce": nonce,
+        "mensagem_cifrada": mensagem_cifrada,
+        "chave_aes_cifrada": chave_aes_cifrada
+    }
+
     return "Mensagem recebida por Alice!"
 
 app.run(
