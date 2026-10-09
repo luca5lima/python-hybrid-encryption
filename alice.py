@@ -57,6 +57,11 @@ def enviar_mensagem():
         "chave_aes_cifrada": chave_aes_cifrada
     }
 
+    # 4. Serializa e envia para o Bob
+    dados = pickle.dumps(pacote)
+    resposta = requests.post(f"{URL_BOB}/message", data=dados)
+    print("Bob respondeu:", resposta.text)
+
     return "Mensagem recebida por Alice!"
 
 app.run(
